@@ -1,5 +1,6 @@
 class Item:
     pay_rate = 0.8  # The pay rate after 20% discount
+    all = []
 
     def __init__(self, name: str, price: float, quantity=1):
         # Run validations to the received arguments
@@ -11,22 +12,28 @@ class Item:
         self.price = price
         self.quantity = quantity
 
+        # Action to execute
+        Item.all.append(self)
+
     def calculate_total_price(self):
         return self.price * self.quantity
 
     def apply_discount(self):
         self.price *= self.pay_rate
 
+    def __repr__(self):
+        return f'Item("{self.name}", {self.price}, {self.quantity})'
+
 
 item_one = Item("Phone", 100, 5)
-print(item_one.calculate_total_price())
-
-item_one.apply_discount()
-print(item_one.price)
-
 item_two = Item("Laptop", 1000)
-print(item_two.calculate_total_price())
+item_three = Item("Cable", 10, 5)
+item_four = Item("Mouse", 50, 5)
+item_five = Item("Keyboard", 75, 5)
 
-item_two.pay_rate = 0.7
-item_two.apply_discount()
-print(item_two.price)
+print(Item.all)
+
+for instance in Item.all:
+    print(
+        f"The price of a {instance.name} is ${instance.price} and there are {instance.quantity} in stock."
+    )
