@@ -1,3 +1,6 @@
+import csv
+
+
 class Item:
     pay_rate = 0.8  # The pay rate after 20% discount
     all = []
@@ -21,19 +24,27 @@ class Item:
     def apply_discount(self):
         self.price *= self.pay_rate
 
+    @classmethod
+    def instantiate_from_csv(cls):
+        with open("items.csv", "r") as f:
+            reader = csv.DictReader(f)
+            items = list(reader)
+
+        for item in items:
+            Item(
+                name=item.get("name"),
+                price=float(item.get("price")),
+                quantity=int(item.get("quantity")),
+            )
+
     def __repr__(self):
         return f'Item("{self.name}", {self.price}, {self.quantity})'
 
 
-item_one = Item("Phone", 100, 5)
-item_two = Item("Laptop", 1000)
-item_three = Item("Cable", 10, 5)
-item_four = Item("Mouse", 50, 5)
-item_five = Item("Keyboard", 75, 5)
+Item.instantiate_from_csv()
 
 print(Item.all)
 
 for instance in Item.all:
-    print(
-        f"The price of a {instance.name} is ${instance.price} and there are {instance.quantity} in stock."
-    )
+    name, price, quantity = instance.name, instance.price, instance.quantity
+    print(f"The price of a {name} is ${price} and there are {quantity} in stock.")
