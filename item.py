@@ -11,12 +11,24 @@ class Item:
         assert quantity > 0, f"Quantity {quantity} is not greater than zero"
 
         # Assign to self object
-        self.name = name
+        self.__name = name
         self.price = price
         self.quantity = quantity
 
         # Action to execute
         Item.all.append(self)
+
+    @property
+    # Property decorator is read only attribute
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        if len(value) > 10:
+            raise Exception("Name is too long")
+        else:
+            self.__name = value
 
     def calculate_total_price(self):
         return self.price * self.quantity
@@ -53,7 +65,3 @@ class Item:
         return (
             f'{self.__class__.__name__}("{self.name}", {self.price}, {self.quantity})'
         )
-
-    @property
-    def read_only_name(self):
-        return "Dipesh Paudel"
